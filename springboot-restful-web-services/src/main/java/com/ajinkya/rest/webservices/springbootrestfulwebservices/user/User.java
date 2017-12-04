@@ -2,6 +2,9 @@ package com.ajinkya.rest.webservices.springbootrestfulwebservices.user;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -9,8 +12,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description="All details about user.")
+@Entity
 public class User {
 
+	@Id
+	@GeneratedValue
 	private Integer id;
 	
 	@Size(min=2, message="Name should have atlease 2 chracters")
