@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ajinkya.rest.webservices.springbootrestfulwebservices.post.Post;
+import com.ajinkya.rest.webservices.springbootrestfulwebservices.post.PostRepository;
+
 @RestController
 public class UserJPAResource {
 
@@ -28,6 +31,9 @@ public class UserJPAResource {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PostRepository postRepository;
 	
 	@GetMapping(path = "/jpa/users")
 	public List<User> retrieveAllUsers() {
@@ -64,5 +70,32 @@ public class UserJPAResource {
 	@DeleteMapping(path = "/jpa/users/{id}")
 	public void deleteUser(@PathVariable Integer id) {
 		userRepository.deleteById(id);
+	}
+	
+	@GetMapping(path = "/jpa/users/{id}/posts")
+	public List<Post> retrieveAllUserPost(@PathVariable Integer id) {
+		Optional<User> user = userRepository.findById(id);
+		if (!user.isPresent()) {
+			throw new UserNotFoundException("id-"+id);
+		}
+		
+		return user.get().getPost();
+	}
+	
+	@PostMapping(path = "/jpa/users/{id}/posts")
+	public ResponseEntity<Object> createPost(@PathVariable Integer id, @Valid @RequestBody Post post) {
+		Optional<User> userOptional = userRepository.findById(id);
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+id);
+		}
+		User user = userOptional.get();
+		post.setUser(user);
+		postRepository.save(post);
+		URI location = ServletUriComponentsBuilder
+							.fromCurrentRequest()
+							.path("/{id}")
+							.buildAndExpand(post.getId())
+							.toUri();
+		return ResponseEntity.created(location).build();
 	}
 }

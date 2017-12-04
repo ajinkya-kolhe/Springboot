@@ -1,12 +1,16 @@
 package com.ajinkya.rest.webservices.springbootrestfulwebservices.user;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+
+import com.ajinkya.rest.webservices.springbootrestfulwebservices.post.Post;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,6 +31,9 @@ public class User {
 	@ApiModelProperty(notes="Birth date should be in the past")
 	private Date birthDate;
 
+	@OneToMany(mappedBy="user")
+	private List<Post> post;
+	
 	protected User() {
 
 	}
@@ -62,6 +69,14 @@ public class User {
 		this.birthDate = birthDate;
 	}
 	
+	public List<Post> getPost() {
+		return post;
+	}
+
+	public void setPost(List<Post> post) {
+		this.post = post;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", birthDate=" + birthDate + "]";
