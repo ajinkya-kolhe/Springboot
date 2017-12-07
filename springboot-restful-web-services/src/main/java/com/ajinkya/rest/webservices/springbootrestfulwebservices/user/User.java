@@ -3,6 +3,7 @@ package com.ajinkya.rest.webservices.springbootrestfulwebservices.user;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,11 +32,10 @@ public class User {
 	@ApiModelProperty(notes="Birth date should be in the past")
 	private Date birthDate;
 
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",cascade=CascadeType.ALL)
 	private List<Post> post;
 	
 	protected User() {
-
 	}
 	
 	public User(Integer id, String name, Date date) {
