@@ -1,4 +1,4 @@
-package com.ajinkya.microservices.currencyexchangeservice.bean;
+package com.ajinkya.microservices.currencyexchangeservice;
 
 import java.math.BigDecimal;
 
